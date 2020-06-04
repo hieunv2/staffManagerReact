@@ -1,0 +1,142 @@
+{
+  "sidebar": {
+    "user_management": "User Management",
+    "user_list": "User List",
+    "create_user": "Create a new user",
+    "department_list": "Department List",
+    "create_department": "Create a new department",
+    "approval_management": "Approval Management",
+    "approval_list": "Approval List",
+    "create_approval": "Create a new approval",
+    "my_profile": "My profile",
+    "update_my_profile": "Update my profile",
+    "my_stamp": "My stamps",
+
+    "template_management": "Template management",
+    "template_list": "Template List",
+    "create_template": "Create a new template"
+  },
+  "users": {
+    "list": "User list",
+    "create_user": "Add new new user",
+    "update_user": "Update user",
+    "filters": "Filters",
+    "name": "Name of user",
+    "department": "Department",
+    "position": "Position",
+    "search": "Search",
+    "reset": "Reset",
+    "form": {
+      "name": "Name",
+      "department": "Department",
+      "position": "Position",
+      "login_info": "Login info",
+      "email": "Email",
+      "password": "Password"
+    }
+  },
+  "departments": {
+    "list": "Department list",
+    "create_department": "Create a department",
+    "update_department": "Update department",
+    "form": {
+      "name": "Department name"
+    }
+  },
+  "approvals": {
+    "approval_list": "Approval List",
+    "create_approval": "Create a approval",
+    "update_approval": "Update approval",
+    "activate": "Activate",
+    "make_approve": "Make approve",
+    "approve": "Approve",
+    "activate_approval": "Activate approval",
+    "my_stamps": "My stamps",
+    "approve_status": "Approve status",
+    "approve_comment": "Approve note",
+    "list": {
+      "all": "All",
+      "active": "Active",
+      "not_activated": "Not activated",
+      "waiting": "Waiting approval",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "creator": "Creator",
+      "achieved_at": "Achieved at",
+      "message": "Message",
+      "status": "Status",
+      "preview": "Preview"
+    },
+    "form": {
+      "name": "Title of approval",
+      "select_template": "Select a template",
+      "tab_form_data": "Template form data",
+      "tab_approvers": "Approver",
+      "select_approver": "Select a approver",
+      "add_approver": "Add approver"
+    }
+  },
+  "forms": {
+    "input_section": "Setting input schemes"
+  },
+  "stamps": {
+    "management": "My stamps management",
+    "personal": "Personal",
+    "manager": "Manager"
+  },
+  "templates": {
+    "list": "Template list",
+    "create_template": "Add new template",
+    "update_template": "Update template",
+    "form": {
+      "name": "Name",
+      "template": "Template code",
+      "input_schemes": "Input schemes",
+      "add_new_input": "Add a new input",
+      "add_input": "Add",
+      "input_label": "Label",
+      "input_type": "Type",
+      "value_list": "Value list"
+    }
+  },
+  "login": {
+    "sign_in_system": "Login",
+    "sign_in": "Login",
+    "email_address": "Email address",
+    "password": "Password",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password"
+  },
+  "error": {
+    "server_error": "Server error",
+    "invalid_credentials": "Invalid credentials",
+    "is_required": "This field is required",
+    "invalid_email": "This email is invalid",
+    "add_at_least_one_approval": "Add at least one Approver"
+  },
+  "staff": "Staff",
+  "manager": "Manager",
+  "director": "Director",
+  "select_one": "Select one",
+  "my_profile": "Profile",
+  "logout": "Log Out",
+  "me": "Me",
+  "update_my_profile": "Update my profile",
+  "edit": "Edit",
+  "delete": "Delete",
+  "are_you_sure": "Are you sure?",
+  "you_want_to_delete_this_item": "You want to delete this item.",
+  "ok": "Ok",
+  "save": "Save",
+  "cancel": "Cancel",
+  "close": "Close",
+  "apply": "Apply",
+  "preview": "Preview",
+  "rows_per_page": "Rows per page",
+  "number_order": "No",
+  "update_success": "Update successful",
+  "update_error": "Update error",
+  "reset_password": "Reset password",
+  "reset_email_password": "Enter your email to reset password",
+  "email_sent_to_your_inbox": "Email sent to your inbox"
+}
