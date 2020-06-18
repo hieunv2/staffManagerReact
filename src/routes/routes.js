@@ -13,6 +13,15 @@ const UpdateMyProfile = React.lazy(() =>
 const DepartmentList = React.lazy(() => import('../containers/DepartmentList'));
 const DepartmentForm = React.lazy(() => import('../containers/DepartmentForm'));
 
+// status
+
+const StatusList = React.lazy(() => import('../containers/StatusList'));
+const StatusForm = React.lazy(() => import('../containers/StatusForm'));
+
+//task
+const TaskList = React.lazy(() => import('../containers/TaskList'));
+const TaskForm = React.lazy(() => import('../containers/TaskForm'));
+
 const routes = [
   {
     path: '/login',
@@ -55,6 +64,36 @@ const routes = [
   {
     path: '/departments/edit/:id',
     component: DepartmentForm,
+    protected: true,
+  },
+  {
+    path: '/status',
+    component: StatusList,
+    protected: true,
+  },
+  {
+    path: '/status/create',
+    component: StatusForm,
+    protected: true,
+  },
+  {
+    path: '/status/edit/:id',
+    component: StatusForm,
+    protected: true,
+  },
+  {
+    path: '/tasks',
+    component: TaskList,
+    protected: true,
+  },
+  {
+    path: '/tasks/create',
+    component: TaskForm,
+    protected: true,
+  },
+  {
+    path: '/tasks/edit/:id',
+    component: TaskForm,
     protected: true,
   },
 ];

@@ -15,7 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 
-const StyledTableCell = withStyles(theme => ({
+const StyledTableCell = withStyles((theme) => ({
   head: {
     // backgroundColor: theme.palette.common.black,
     // color: theme.palette.common.white,
@@ -25,7 +25,7 @@ const StyledTableCell = withStyles(theme => ({
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles(theme => ({
+const StyledTableRow = withStyles((theme) => ({
   root: {
     // '&:nth-of-type(odd)': {
     //   backgroundColor: theme.palette.background.default,
@@ -42,31 +42,31 @@ const useStyles = makeStyles({
   },
 });
 
-const useStyles1 = makeStyles(theme => ({
+const useStyles1 = makeStyles((theme) => ({
   root: {
     flexShrink: 0,
     marginLeft: theme.spacing(2.5),
   },
 }));
 
-const TablePaginationActions = React.memo(props => {
+const TablePaginationActions = React.memo((props) => {
   const classes = useStyles1();
   const theme = useTheme();
   const {count, page, rowsPerPage, onChangePage} = props;
 
-  const handleFirstPageButtonClick = event => {
+  const handleFirstPageButtonClick = (event) => {
     onChangePage(event, 0);
   };
 
-  const handleBackButtonClick = event => {
+  const handleBackButtonClick = (event) => {
     onChangePage(event, page - 1);
   };
 
-  const handleNextButtonClick = event => {
+  const handleNextButtonClick = (event) => {
     onChangePage(event, page + 1);
   };
 
-  const handleLastPageButtonClick = event => {
+  const handleLastPageButtonClick = (event) => {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
@@ -126,7 +126,7 @@ const CustomizedTable = React.memo(
       onPaginate({page, per_page: rowsPerPage});
     };
 
-    const handleChangeRowsPerPage = event => {
+    const handleChangeRowsPerPage = (event) => {
       const newRowsPerPage = parseInt(event.target.value, 10);
       onPaginate({page, per_page: newRowsPerPage});
     };
@@ -183,7 +183,6 @@ const CustomizedTable = React.memo(
                   count={total || dataTable.length}
                   rowsPerPage={rowsPerPage || 10}
                   page={page ? page - 1 : 0}
-                  labelRowsPerPage={t('rows_per_page')}
                   onChangePage={handleChangePage}
                   onChangeRowsPerPage={handleChangeRowsPerPage}
                   ActionsComponent={TablePaginationActions}

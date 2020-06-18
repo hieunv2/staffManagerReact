@@ -33,10 +33,10 @@ const ClippedDrawer = React.memo((props) => {
     location.pathname.indexOf('/users') !== -1,
   );
   const [openAM, setOpenAM] = useState(
-    location.pathname.indexOf('/approvals') !== -1,
+    location.pathname.indexOf('/departments') !== -1,
   );
-  const [openMP, setOpenMP] = useState(
-    location.pathname.indexOf('/my-profiles') !== -1,
+  const [openSM, setOpenSM] = useState(
+    location.pathname.indexOf('/status') !== -1,
   );
   const [openTM, setOpenTM] = useState(
     location.pathname.indexOf('/templates') !== -1,
@@ -112,6 +112,60 @@ const ClippedDrawer = React.memo((props) => {
               <ListItemLink
                 to="/departments/create"
                 primary="Thêm phòng ban"
+                className={classes.nested}
+              />
+            </List>
+          </Collapse>
+        </List>
+
+        <List>
+          <ListItemMenu button onClick={() => setOpenSM(!openSM)}>
+            <ListItemIcon classes={{root: classes.icon}}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemTextMenu primary="Công việc" />
+            {openSM ? <ExpandLess /> : <ExpandMore />}
+          </ListItemMenu>
+          <Collapse in={openSM} timeout="auto" unmountOnExit>
+            <List
+              component="div"
+              disablePadding
+              onClick={() => props.onClose(false)}>
+              <ListItemLink
+                to="/tasks"
+                primary="Danh sách công việc"
+                className={classes.nested}
+              />
+              <ListItemLink
+                to="/tasks/create"
+                primary="Thêm công việc"
+                className={classes.nested}
+              />
+            </List>
+          </Collapse>
+        </List>
+
+        <List>
+          <ListItemMenu button onClick={() => setOpenSM(!openSM)}>
+            <ListItemIcon classes={{root: classes.icon}}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemTextMenu primary="Trạng thái công việc" />
+            {openSM ? <ExpandLess /> : <ExpandMore />}
+          </ListItemMenu>
+          <Collapse in={openSM} timeout="auto" unmountOnExit>
+            <List
+              component="div"
+              disablePadding
+              onClick={() => props.onClose(false)}>
+              <ListItemLink
+                to="/status"
+                primary="Danh sách trạng thái"
+                className={classes.nested}
+              />
+              <ListItemLink
+                to="/status/create"
+                primary="Thêm trang thái"
                 className={classes.nested}
               />
             </List>

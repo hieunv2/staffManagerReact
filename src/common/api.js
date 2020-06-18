@@ -8,7 +8,7 @@ export const api = axios.create({
   withCredentials: true,
   headers: {'Content-Type': 'application/json'},
   timeout: 10 * 1000,
-  validateStatus: status => status < 500,
+  validateStatus: (status) => status < 500,
 });
 
 export const apiProtected = axios.create({
@@ -16,10 +16,10 @@ export const apiProtected = axios.create({
   withCredentials: true,
   headers: {'Content-Type': 'application/json'},
   timeout: 10 * 1000,
-  validateStatus: status => status < 500,
+  validateStatus: (status) => status < 500,
 });
 
-export const setAccessToken = token => {
+export const setAccessToken = (token) => {
   apiProtected.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
@@ -44,7 +44,7 @@ export const logout = async () => {
   }
 };
 
-export const forgotPassword = async data => {
+export const forgotPassword = async (data) => {
   try {
     const res = await api.post('/forgot-password', data);
     return res.data;
@@ -53,7 +53,7 @@ export const forgotPassword = async data => {
   }
 };
 
-export const resetPassword = async data => {
+export const resetPassword = async (data) => {
   try {
     const res = await api.post('/reset-password', data);
     return res.data;
@@ -71,7 +71,7 @@ export const me = async () => {
   }
 };
 
-export const searchUser = async data => {
+export const searchUser = async (data) => {
   try {
     const res = await apiProtected.post('/users/search?per_page=1000', data);
     return res.data;
@@ -80,7 +80,16 @@ export const searchUser = async data => {
   }
 };
 
-export const updateProfile = async data => {
+export const searchTask = async (data) => {
+  try {
+    const res = await apiProtected.post('/tasks/search?per_page=1000', data);
+    return res.data;
+  } catch (e) {
+    return {error: 'server_error'};
+  }
+};
+
+export const updateProfile = async (data) => {
   try {
     const res = await apiProtected.post('me/update-profile', data);
     return res.data;
@@ -89,7 +98,7 @@ export const updateProfile = async data => {
   }
 };
 
-export const getResourceData = async resource => {
+export const getResourceData = async (resource) => {
   try {
     const res = await apiProtected.get(`/${resource}`);
     return res.data;
@@ -129,7 +138,7 @@ export const getFileUrl = () => {
   return `${API_URL}/files`;
 };
 
-export const genPdf = async data => {
+export const genPdf = async (data) => {
   try {
     const res = await apiProtected.post('/files', data);
     return res.data;
@@ -156,7 +165,7 @@ export const approve = async (id, data) => {
   }
 };
 
-export const updateStamp = async data => {
+export const updateStamp = async (data) => {
   try {
     const res = await apiProtected.post(`/stamps`, data);
     return res.data;

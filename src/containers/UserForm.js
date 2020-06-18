@@ -217,7 +217,7 @@ const UserForm = React.memo((props) => {
                       <MenuItem key={positions.ADMIN} value={positions.ADMIN}>
                         Admin
                       </MenuItem>
-                      ))}
+                      )){'}'}
                     </TextField>
                   </Grid>
                 </Grid>
