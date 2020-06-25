@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useFormik} from 'formik';
@@ -25,9 +25,10 @@ import {useDialog} from '../components/Dialog';
 import Loading from '../components/Loading';
 import BackdropLoading from '../components/BackdropLoading';
 import CustomizedTables from '../components/CustomizedTable';
+import {AuthContext} from '../containers/Auth/AuthProvider';
 //-------------------------------------
 
-const UserList = React.memo((props) => {
+const MyUser = React.memo((props) => {
   const {t} = useTranslation();
   const history = useHistory();
   const dialog = useDialog();
@@ -35,8 +36,10 @@ const UserList = React.memo((props) => {
   const [isSearching, setSearching] = useState(false);
   const [backdropLoading, setBackdropLoading] = useState(false);
 
+  const {user} = useContext(AuthContext);
+
   const [userRes, users, isFetchedUserData, refetch] = useApiFetchData({
-    resource: 'users',
+    resource: `my-user/${user?.department_id}`,
     options: {per_page: 10},
   });
   const [depRes, departments, isFetchedDepartmentData] = useApiFetchData({
@@ -82,9 +85,10 @@ const UserList = React.memo((props) => {
       if (values.name) {
         formData.name = values.name;
       }
-      if (values.departmentId) {
-        formData.department_id = values.departmentId;
+      if (user?.department_id) {
+        formData.department_id = user?.department_id;
       }
+
       const res = await api.searchUser(formData);
       if (res?.success) {
         let data = [];
@@ -248,36 +252,6 @@ const UserList = React.memo((props) => {
                           />
                         </Grid>
                       </Grid>
-                      <Grid
-                        item
-                        container
-                        direction="row"
-                        xs={12}
-                        md={6}
-                        container
-                        alignItems="center">
-                        <Grid item xs={12} sm={3} container alignItems="center">
-                          <Typography>Phòng ban</Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6} container alignItems="center">
-                          {isFetchedDepartmentData && (
-                            <TextField
-                              select
-                              variant="outlined"
-                              size="small"
-                              fullWidth
-                              name="departmentId"
-                              value={formik.values.departmentId || ''}
-                              onChange={formik.handleChange('departmentId')}>
-                              {departments.map((item) => (
-                                <MenuItem key={item.id} value={item.id}>
-                                  {item.name}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          )}
-                        </Grid>
-                      </Grid>
                     </Grid>
                     <Button
                       type="submit"
@@ -375,4 +349,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default UserList;
+export default MyUser;

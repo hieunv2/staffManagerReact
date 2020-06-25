@@ -59,148 +59,149 @@ const ClippedDrawer = React.memo((props) => {
       </div>
       <Divider />
       <div className={classes.menuList}>
-        {auth.user?.position === positions.ADMIN && (
-          <List>
-            <ListItemMenu
-              button
-              onClick={() => setOpenUM(!openUM)}
-              classes={{button: classes.button}}>
-              <ListItemIcon classes={{root: classes.icon}}>
-                <PeopleAltIcon />
-              </ListItemIcon>
-              <ListItemTextMenu primary="Quản lý nhân viên" />
-              {openUM ? <ExpandLess /> : <ExpandMore />}
-            </ListItemMenu>
-            <Collapse in={openUM} timeout="auto" unmountOnExit>
-              <List
-                component="div"
-                disablePadding
-                onClick={() => props.onClose(false)}>
-                <ListItemLink
-                  to="/users"
-                  primary="Danh sách nhân viên"
-                  className={classes.nested}
-                />
-                <ListItemLink
-                  to="/users/create"
-                  primary="Thêm nhân viên"
-                  className={classes.nested}
-                />
-              </List>
-            </Collapse>
-          </List>
+        {auth.user?.position === 2 && (
+          <div>
+            <List>
+              <ListItemLink to="/department-task" primary="Trang chủ" />
+            </List>
+            <List>
+              <ListItemMenu
+                button
+                onClick={() => setOpenUM(!openUM)}
+                classes={{button: classes.button}}>
+                <ListItemIcon classes={{root: classes.icon}}>
+                  <PeopleAltIcon />
+                </ListItemIcon>
+                <ListItemTextMenu primary="Quản lý nhân viên" />
+                {openUM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemMenu>
+              <Collapse in={openUM} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                  onClick={() => props.onClose(false)}>
+                  <ListItemLink
+                    to="/users"
+                    primary="Danh sách nhân viên"
+                    className={classes.nested}
+                  />
+                  <ListItemLink
+                    to="/users/create"
+                    primary="Thêm nhân viên"
+                    className={classes.nested}
+                  />
+                </List>
+              </Collapse>
+            </List>
+
+            <List>
+              <ListItemMenu button onClick={() => setOpenAM(!openAM)}>
+                <ListItemIcon classes={{root: classes.icon}}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemTextMenu primary="Quản lý phòng ban" />
+                {openAM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemMenu>
+              <Collapse in={openAM} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                  onClick={() => props.onClose(false)}>
+                  <ListItemLink
+                    to="/departments"
+                    primary="Danh sách phòng ban"
+                    className={classes.nested}
+                  />
+                  <ListItemLink
+                    to="/departments/create"
+                    primary="Thêm phòng ban"
+                    className={classes.nested}
+                  />
+                </List>
+              </Collapse>
+            </List>
+
+            <List>
+              <ListItemMenu button onClick={() => setOpenSM(!openSM)}>
+                <ListItemIcon classes={{root: classes.icon}}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemTextMenu primary="Công việc" />
+                {openSM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemMenu>
+              <Collapse in={openSM} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                  onClick={() => props.onClose(false)}>
+                  <ListItemLink
+                    to="/tasks"
+                    primary="Danh sách công việc"
+                    className={classes.nested}
+                  />
+                  <ListItemLink
+                    to="/tasks/create"
+                    primary="Thêm công việc"
+                    className={classes.nested}
+                  />
+                </List>
+              </Collapse>
+            </List>
+
+            <List>
+              <ListItemMenu button onClick={() => setOpenTM(!openTM)}>
+                <ListItemIcon classes={{root: classes.icon}}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemTextMenu primary="Trạng thái công việc" />
+                {openTM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemMenu>
+              <Collapse in={openTM} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                  onClick={() => props.onClose(false)}>
+                  <ListItemLink
+                    to="/status"
+                    primary="Danh sách trạng thái"
+                    className={classes.nested}
+                  />
+                  <ListItemLink
+                    to="/status/create"
+                    primary="Thêm trang thái"
+                    className={classes.nested}
+                  />
+                </List>
+              </Collapse>
+            </List>
+          </div>
         )}
-
-        <List>
-          <ListItemMenu button onClick={() => setOpenAM(!openAM)}>
-            <ListItemIcon classes={{root: classes.icon}}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemTextMenu primary="Quản lý phòng ban" />
-            {openAM ? <ExpandLess /> : <ExpandMore />}
-          </ListItemMenu>
-          <Collapse in={openAM} timeout="auto" unmountOnExit>
-            <List
-              component="div"
-              disablePadding
-              onClick={() => props.onClose(false)}>
-              <ListItemLink
-                to="/departments"
-                primary="Danh sách phòng ban"
-                className={classes.nested}
-              />
-              <ListItemLink
-                to="/departments/create"
-                primary="Thêm phòng ban"
-                className={classes.nested}
-              />
-            </List>
-          </Collapse>
-        </List>
-
-        <List>
-          <ListItemMenu button onClick={() => setOpenSM(!openSM)}>
-            <ListItemIcon classes={{root: classes.icon}}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemTextMenu primary="Công việc" />
-            {openSM ? <ExpandLess /> : <ExpandMore />}
-          </ListItemMenu>
-          <Collapse in={openSM} timeout="auto" unmountOnExit>
-            <List
-              component="div"
-              disablePadding
-              onClick={() => props.onClose(false)}>
-              <ListItemLink
-                to="/tasks"
-                primary="Danh sách công việc"
-                className={classes.nested}
-              />
-              <ListItemLink
-                to="/tasks/create"
-                primary="Thêm công việc"
-                className={classes.nested}
-              />
-            </List>
-          </Collapse>
-        </List>
-
-        <List>
-          <ListItemMenu button onClick={() => setOpenSM(!openSM)}>
-            <ListItemIcon classes={{root: classes.icon}}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemTextMenu primary="Trạng thái công việc" />
-            {openSM ? <ExpandLess /> : <ExpandMore />}
-          </ListItemMenu>
-          <Collapse in={openSM} timeout="auto" unmountOnExit>
-            <List
-              component="div"
-              disablePadding
-              onClick={() => props.onClose(false)}>
-              <ListItemLink
-                to="/status"
-                primary="Danh sách trạng thái"
-                className={classes.nested}
-              />
-              <ListItemLink
-                to="/status/create"
-                primary="Thêm trang thái"
-                className={classes.nested}
-              />
-            </List>
-          </Collapse>
-        </List>
 
         <Divider />
 
-        {auth.user?.position === positions.MANAGER && (
-          <List>
-            <ListItemMenu button onClick={() => setOpenTM(!openTM)}>
-              <ListItemIcon classes={{root: classes.icon}}>
-                <ListAltIcon />
-              </ListItemIcon>
-              <ListItemTextMenu primary={t('sidebar.template_management')} />
-              {openTM ? <ExpandLess /> : <ExpandMore />}
-            </ListItemMenu>
-            <Collapse in={openTM} timeout="auto" unmountOnExit>
-              <List
-                component="div"
-                disablePadding
-                onClick={() => props.onClose(false)}>
-                <ListItemLink
-                  to="/templates"
-                  primary={t('sidebar.template_list')}
-                  className={classes.nested}
-                />
-                <ListItemLink
-                  to="/templates/create"
-                  primary={t('sidebar.create_template')}
-                  className={classes.nested}
-                />
-              </List>
-            </Collapse>
-          </List>
+        {auth.user?.position === 1 && (
+          <div>
+            <List>
+              <ListItemLink to="/myTask" primary="Công việc trong phòng" />
+            </List>
+            <List>
+              <ListItemLink to="/tasks/create" primary="Thêm công việc" />
+            </List>
+            <List>
+              <ListItemLink to="/myUser" primary="Nhân viên trong phòng" />
+            </List>
+            <List>
+              <ListItemLink to="/user-create" primary="Thêm nhân viên" />
+            </List>
+          </div>
+        )}
+
+        {auth.user?.position === 0 && (
+          <div>
+            <List>
+              <ListItemLink to="/task-user" primary="Công việc của tôi" />
+            </List>
+          </div>
         )}
       </div>
     </Drawer>
@@ -259,6 +260,9 @@ const useStyles = makeStyles((theme) => ({
   },
   nested: {
     paddingLeft: theme.spacing(2) + 40, // + minWidth icon
+  },
+  home: {
+    paddingLeft: theme.spacing(2) + 10,
   },
   icon: {
     minWidth: 40,

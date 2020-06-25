@@ -14,6 +14,9 @@ import AddIcon from '@material-ui/icons/Add';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
 
 import each from 'lodash/each';
 import find from 'lodash/find';
@@ -34,6 +37,26 @@ const TaskList = React.memo((props) => {
 
   const [isSearching, setSearching] = useState(false);
   const [backdropLoading, setBackdropLoading] = useState(false);
+  const [personName, setPersonName] = useState([]);
+
+  const handleChange = (event) => {
+    setPersonName(event.target.value);
+  };
+
+  const [userRes, users, isFetchedUserData] = useApiFetchData({
+    resource: 'users',
+  });
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
 
   const [taskRes, tasks, isFetchedTaskData, refetch] = useApiFetchData({
     resource: 'tasks',
@@ -77,7 +100,11 @@ const TaskList = React.memo((props) => {
         formData.name = values.name;
       }
       if (values.statusId) {
-        formData.statusId = values.statusId;
+        formData.status_id = values.statusId;
+      }
+      let ids = personName.map((p) => p.id);
+      if (ids.length > 0) {
+        formData.users = JSON.stringify(ids);
       }
       const res = await api.searchTask(formData);
       if (res?.success) {
@@ -257,6 +284,47 @@ const TaskList = React.memo((props) => {
                                 </MenuItem>
                               ))}
                             </TextField>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        direction="row"
+                        xs={12}
+                        md={6}
+                        container
+                        alignItems="center">
+                        <Grid item xs={12} sm={3} container alignItems="center">
+                          <Typography>Người thực hiện</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6} container alignItems="center">
+                          {isFetchedStatusData && (
+                            <Select
+                              labelId="demo-mutiple-chip-label"
+                              id="demo-mutiple-chip"
+                              multiple
+                              value={personName}
+                              onChange={handleChange}
+                              input={<Input id="select-multiple-chip" />}
+                              renderValue={(selected) => (
+                                <div className={classes.chips}>
+                                  {selected.map((item) => (
+                                    <Chip
+                                      key={item.id}
+                                      label={item.name}
+                                      className={classes.chip}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                              MenuProps={MenuProps}>
+                              {users?.map((item, index) => (
+                                <MenuItem key={index} value={item}>
+                                  {item.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
                           )}
                         </Grid>
                       </Grid>

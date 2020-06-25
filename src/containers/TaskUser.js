@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useFormik} from 'formik';
@@ -14,6 +14,10 @@ import AddIcon from '@material-ui/icons/Add';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import {AuthContext} from '../containers/Auth/AuthProvider';
 
 import each from 'lodash/each';
 import find from 'lodash/find';
@@ -27,54 +31,70 @@ import BackdropLoading from '../components/BackdropLoading';
 import CustomizedTables from '../components/CustomizedTable';
 //-------------------------------------
 
-const UserList = React.memo((props) => {
+const TaskList = React.memo((props) => {
   const {t} = useTranslation();
   const history = useHistory();
   const dialog = useDialog();
 
   const [isSearching, setSearching] = useState(false);
   const [backdropLoading, setBackdropLoading] = useState(false);
+  const [personName, setPersonName] = useState([]);
 
-  const [userRes, users, isFetchedUserData, refetch] = useApiFetchData({
+  const {user} = useContext(AuthContext);
+
+  const handleChange = (event) => {
+    setPersonName(event.target.value);
+  };
+
+  const [userRes, users, isFetchedUserData] = useApiFetchData({
     resource: 'users',
+  });
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  const [taskRes, tasks, isFetchedTaskData, refetch] = useApiFetchData({
+    resource: `taskUser/${user?.id}`,
     options: {per_page: 10},
   });
-  const [depRes, departments, isFetchedDepartmentData] = useApiFetchData({
-    resource: 'departments',
+  const [statusRes, status, isFetchedStatusData] = useApiFetchData({
+    resource: 'status',
     options: {per_page: 1000},
   });
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
-    if (users && departments) {
+    if (tasks) {
       let data = [];
-      each(users, (u) => {
-        let position = 'Nhân viên';
-        if (u.position === positions.MANAGER) position = 'Quản trị viên';
-        else if (u.position === positions.ADMIN) position = 'Admin';
-
-        let dep = find(departments, (dep) => dep.id === u.department_id);
-        let department = dep ? dep.name : '';
-
+      each(tasks, (u) => {
         data.push({
           id: u.id,
           name: u.name,
-          gender: u.gender,
-          phone: u.phone,
-          email: u.email,
-          department,
-          position,
-          address: u.address,
+          creator: u?.creator?.name,
+          startDay: u?.start_day,
+          endDay: u?.end_day,
+          description: u?.description,
+          progress: u?.progress,
+          status: u?.status?.name,
+          date: u?.created_at || u?.updated_at,
         });
       });
       setDataTable(data);
     }
-  }, [users, departments]);
+  }, [tasks]);
 
   const formik = useFormik({
     initialValues: {
       name: '',
-      deparmentId: '',
+      statusId: '',
     },
     onSubmit: async (values) => {
       setSearching(true);
@@ -82,28 +102,27 @@ const UserList = React.memo((props) => {
       if (values.name) {
         formData.name = values.name;
       }
-      if (values.departmentId) {
-        formData.department_id = values.departmentId;
+      if (values.statusId) {
+        formData.status_id = values.statusId;
       }
-      const res = await api.searchUser(formData);
+      let ids = personName.map((p) => p.id);
+      if (ids.length > 0) {
+        formData.users = JSON.stringify(ids);
+      }
+      const res = await api.searchTask(formData);
       if (res?.success) {
         let data = [];
         each(res.data, (u) => {
-          let position = 'Nhân viên';
-          if (u.position === positions.MANAGER) position = 'Quản trị viên';
-          else if (u.position === positions.ADMIN) position = 'Admin';
-
-          let dep = find(departments, (dep) => dep.id === u.department_id);
-          let department = dep ? dep.name : '';
           data.push({
             id: u.id,
             name: u.name,
-            gender: u.gender,
-            phone: u.phone,
-            email: u.email,
-            department,
-            position,
-            address: u.address,
+            creator: u?.creator?.name,
+            startDay: u?.start_day,
+            endDay: u?.end_day,
+            description: u?.description,
+            progress: u?.progress,
+            status: u?.status?.name,
+            date: u?.created_at || u?.updated_at,
           });
         });
         setDataTable(data);
@@ -140,7 +159,7 @@ const UserList = React.memo((props) => {
         },
       });
       setBackdropLoading(true);
-      const res = await api.deleteResource('users', id);
+      const res = await api.deleteResource('tasks', id);
       if (res.success) {
         refetch();
       }
@@ -152,32 +171,32 @@ const UserList = React.memo((props) => {
 
   const headerTable = [
     {
-      label: 'Tên nhân viên',
+      label: 'Tên công việc',
       field: 'name',
     },
     {
-      label: 'Giới tính',
-      field: 'gender',
+      label: 'Mô tả',
+      field: 'description',
     },
     {
-      label: 'SĐT',
-      field: 'phone',
+      label: 'Trạng thái',
+      field: 'status',
     },
     {
-      label: 'Email',
-      field: 'email',
+      label: 'Người tạo',
+      field: 'creator',
     },
     {
-      label: 'Phòng ban',
-      field: 'department',
+      label: 'Ngày bắt đầu',
+      field: 'startDay',
     },
     {
-      label: 'Chức vụ',
-      field: 'position',
+      label: 'Ngày kết thúc',
+      field: 'endDay',
     },
     {
-      label: 'Địa chỉ',
-      field: 'address',
+      label: 'Tiến độ',
+      field: 'progress',
     },
   ];
 
@@ -192,7 +211,7 @@ const UserList = React.memo((props) => {
         justify="space-between">
         <Grid item>
           <Typography variant="h5" component="h4" gutterBottom>
-            Danh sách nhân viên
+            Danh sách công việc
           </Typography>
         </Grid>
         <Grid item>
@@ -200,15 +219,8 @@ const UserList = React.memo((props) => {
             variant="contained"
             className={classes.topButton}
             startIcon={<AddIcon />}
-            onClick={() => history.push('/users/create')}>
+            onClick={() => history.push('/tasks/create')}>
             Thêm mới
-          </Button>
-          <Button
-            variant="contained"
-            className={classes.topButton}
-            startIcon={<ListAltIcon />}
-            onClick={() => history.push('/departments')}>
-            Phòng ban
           </Button>
         </Grid>
       </Grid>
@@ -216,7 +228,7 @@ const UserList = React.memo((props) => {
       <Grid container>
         <Grid item xs>
           <Paper variant="outlined" className={classes.paperWrapper}>
-            {!isFetchedUserData || !isFetchedDepartmentData ? (
+            {!isFetchedTaskData || !isFetchedStatusData ? (
               <Loading />
             ) : (
               <Fragment>
@@ -234,7 +246,7 @@ const UserList = React.memo((props) => {
                       alignItems="center">
                       <Grid item container direction="row" xs={12} md={6}>
                         <Grid item xs={12} sm={4} container alignItems="center">
-                          <Typography>Họ và tên</Typography>
+                          <Typography>Tên công việc</Typography>
                         </Grid>
                         <Grid item xs={12} sm={8} container alignItems="center">
                           <TextField
@@ -257,24 +269,65 @@ const UserList = React.memo((props) => {
                         container
                         alignItems="center">
                         <Grid item xs={12} sm={3} container alignItems="center">
-                          <Typography>Phòng ban</Typography>
+                          <Typography>Trạng thái</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} container alignItems="center">
-                          {isFetchedDepartmentData && (
+                          {isFetchedStatusData && (
                             <TextField
                               select
                               variant="outlined"
                               size="small"
                               fullWidth
-                              name="departmentId"
-                              value={formik.values.departmentId || ''}
-                              onChange={formik.handleChange('departmentId')}>
-                              {departments.map((item) => (
+                              name="statusId"
+                              value={formik.values.statusId || ''}
+                              onChange={formik.handleChange('statusId')}>
+                              {status.map((item) => (
                                 <MenuItem key={item.id} value={item.id}>
                                   {item.name}
                                 </MenuItem>
                               ))}
                             </TextField>
+                          )}
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        direction="row"
+                        xs={12}
+                        md={6}
+                        container
+                        alignItems="center">
+                        <Grid item xs={12} sm={3} container alignItems="center">
+                          <Typography>Người thực hiện</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6} container alignItems="center">
+                          {isFetchedStatusData && (
+                            <Select
+                              labelId="demo-mutiple-chip-label"
+                              id="demo-mutiple-chip"
+                              multiple
+                              value={personName}
+                              onChange={handleChange}
+                              input={<Input id="select-multiple-chip" />}
+                              renderValue={(selected) => (
+                                <div className={classes.chips}>
+                                  {selected.map((item) => (
+                                    <Chip
+                                      key={item.id}
+                                      label={item.name}
+                                      className={classes.chip}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                              MenuProps={MenuProps}>
+                              {users?.map((item, index) => (
+                                <MenuItem key={index} value={item}>
+                                  {item.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
                           )}
                         </Grid>
                       </Grid>
@@ -300,9 +353,9 @@ const UserList = React.memo((props) => {
                 <CustomizedTables
                   headerTable={headerTable}
                   dataTable={dataTable}
-                  rowsPerPage={parseInt(userRes.paging.per_page)}
-                  page={userRes.paging.current_page}
-                  total={userRes.paging.total}
+                  rowsPerPage={parseInt(taskRes.paging.per_page)}
+                  page={taskRes.paging.current_page}
+                  total={taskRes.paging.total}
                   onPaginate={handlePagination}
                   disablePagination={isSearching}
                   actions={[
@@ -317,7 +370,7 @@ const UserList = React.memo((props) => {
                           Sửa
                         </Button>
                       ),
-                      onClick: (id) => history.push(`/users/edit/${id}`),
+                      onClick: (id) => history.push(`/tasks/edit/${id}`),
                     },
                     {
                       component: (
@@ -375,4 +428,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default UserList;
+export default TaskList;

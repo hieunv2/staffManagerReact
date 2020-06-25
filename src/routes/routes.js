@@ -22,6 +22,19 @@ const StatusForm = React.lazy(() => import('../containers/StatusForm'));
 const TaskList = React.lazy(() => import('../containers/TaskList'));
 const TaskForm = React.lazy(() => import('../containers/TaskForm'));
 
+//my user
+const MyUser = React.lazy(() => import('../containers/MyUser'));
+const TaskDepartment = React.lazy(() => import('../containers/TaskDepartment'));
+const UserFormManager = React.lazy(() =>
+  import('../containers/UserFormManager'),
+);
+const MyTask = React.lazy(() => import('../containers/MyTask'));
+const TaskUser = React.lazy(() => import('../containers/TaskUser'));
+const DepartmentListTask = React.lazy(() =>
+  import('../containers/DepartmentListTask'),
+);
+// const TaskForm = React.lazy(() => import('../containers/TaskForm'));
+
 const routes = [
   {
     path: '/login',
@@ -94,6 +107,36 @@ const routes = [
   {
     path: '/tasks/edit/:id',
     component: TaskForm,
+    protected: true,
+  },
+  {
+    path: '/department-task',
+    component: DepartmentListTask,
+    protected: true,
+  },
+  {
+    path: '/getTask/:id',
+    component: TaskDepartment,
+    protected: true,
+  },
+  {
+    path: '/myTask',
+    component: MyTask,
+    protected: true,
+  },
+  {
+    path: '/myUser',
+    component: MyUser,
+    protected: true,
+  },
+  {
+    path: '/user-create',
+    component: UserFormManager,
+    protected: true,
+  },
+  {
+    path: '/task-user',
+    component: TaskUser,
     protected: true,
   },
 ];
